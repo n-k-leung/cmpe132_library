@@ -1,0 +1,22 @@
+div.text{
+  font-size:100%;
+  position:absolute; 
+  left:600px; 
+  top:150px;
+  white-space: nowrap;
+  font-color: white;
+  color:white;
+  border-radius: 25px;
+  border: 2px solid white;
+  padding: 20px; 
+  width: 420px;
+  height: 490px;
+}
+h1{
+  font-weight: bold;
+  color :white;
+}
+body{
+  background-image: url('abstract-wavy-background.jpg');
+  background-size: cover;
+}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookAdd.css') }}">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin_book">View Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/bookAdd">Add Books<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<h1> Add Books </h1>
+<div class=task>
+<form action="" method="POST" novalidate>
+    {{form.hidden_tag()}}
+    <p> {{form.title.label}}
+       {{form.title(size=200)}}</br>
+    {%for error in form.title.errors%}
+    <span style="color: red;"> [{{error}}]</span></br>
+    {% endfor %}
+    <p> {{form.author.label}}
+      {{form.author(size=200)}}</br>
+   {%for error in form.author.errors%}
+   <span style="color: red;"> [{{error}}]</span></br>
+   {% endfor %}
+    {{form.submit()}}
+    </p>
+</form>
+</div>
+
+<a href="{{ url_for('book') }}">Click here to go back to the Book List!</a>
+
+{% include "login_footer.html" %}
+{% endblock %}

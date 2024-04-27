@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/book">View Books<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<h1>Book List</h1>
+{% if not emptyList %}
+<body>
+    {% for item in items %}
+      <div class=tasks>
+        <input type="checkbox" id={{item.id}} class="check" value="on" {{"checked" if item.completed}}>
+        <span style="color: black;" id="c{{item.id}}"> <p>Title: {{ item.title }}</p><p> Author: {{item.author}}</p></span>
+      </div>
+    {% endfor %}
+</body>
+{% endif %}
+
+</div>
+<script>
+  window.onload = function() {
+    var checkboxes = document.getElementsByClassName("check");
+    //console.log(checkboxes);
+    for (var i = 0; i < checkboxes.length; i++) {
+      if(checkboxes[i].checked) {
+        document.getElementById("c"+checkboxes[i].id).style.setProperty("text-decoration", "line-through");
+      }
+      checkboxes[i].addEventListener('change', (event) => {
+        if (event.currentTarget.checked)
+        {
+          document.getElementById("c"+event.currentTarget.id).style.setProperty("text-decoration", "line-through");
+        }
+        else
+        {
+          document.getElementById("c"+event.currentTarget.id).style.setProperty("text-decoration", "");
+        }
+        window.location.replace("{{ url_for('book') }}/" + event.currentTarget.id);
+      });
+    }
+  }
+</script>
+{% include "login_footer.html" %}
+{% endblock %}
