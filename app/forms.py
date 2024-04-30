@@ -23,7 +23,7 @@ class LogoutForm(FlaskForm):
 
 class DeleteAccountForm(FlaskForm):
     password = StringField(validators=[DataRequired(), validators.Length(max=32)])
-    confirm = SubmitField("Confirm Account Deletion")
+    confirm = SubmitField("Confirm Deletion")
 
 class AddBook(FlaskForm):
     title = StringField('Book name', validators=[DataRequired(), validators.Length(max=200)])
