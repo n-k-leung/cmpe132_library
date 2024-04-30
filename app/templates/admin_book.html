@@ -29,6 +29,7 @@
       <div class=tasks>
         <input type="checkbox" id={{item.id}} class="check" value="on" {{"checked" if item.completed}}>
         <span style="color: black;" id="c{{item.id}}"> <p>Title: {{ item.title }}</p><p> Author: {{item.author}}</p></span>
+        <p><a href="{{url_for('delBook', id = item.id)}}">Delete Book</a></p>
       </div>
     {% endfor %}
 </body>

@@ -76,13 +76,39 @@ def admin():
 #             flash("That book already added! Try again with a different name.")
 #             return redirect("/admin_book")
 #     return render_template('admin_book.html', form = form)
-
+@myapp_obj.route("/modifyUser/<int:id>")
+def modifyUser(id): #get email id of the email that is choosen to be deleted
+    if not current_user.is_authenticated:
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    else: 
+         user = User.query.get(id)
+         user.act_role = user.reg_role
+         user.approve=0
+         db.session.commit()
+         flash('User approved')
+         return redirect("/index")
+    #no need to render when deleting book
+    return render_template('deleteBook.html', form = form)
 @myapp_obj.route("/book/<int:id>", methods=['GET', 'POST'])
 def BookNew(id):
-    item = Book.query.get(id);
-    item.completed = not item.completed;
-    db.session.commit();
+    item = Book.query.get(id)
+    item.completed = not item.completed
+    db.session.commit()
     return redirect('/book')
+@myapp_obj.route("/delBook/<int:id>")
+def delBook(id): #get email id of the email that is choosen to be deleted
+    if not current_user.is_authenticated:
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    else: 
+         book = Book.query.get(id)
+         db.session.delete(book)
+         db.session.commit()
+         flash('Book deleted')
+         return redirect("/book")
+    #no need to render when deleting book
+    return render_template('deleteBook.html', form = form)
     
 @myapp_obj.route("/book", methods=['GET', 'POST'])
 def book():
@@ -174,6 +200,7 @@ def register():
                 return redirect ('/register')
             # new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data)
             #initializing all registered users as guest
+            #approve = 1 initally so all users registered need to be approved
             new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =1)
             #uncomment below to have test book initalized
             # book = Book(title="title1", author='book1', username = form.username.data, completed = 0)
