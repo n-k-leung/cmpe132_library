@@ -22,37 +22,20 @@
 <h1>Book List</h1>
 {% if not emptyList %}
 <body>
-    {% for item in items %}
-      <div class=tasks>
-        <input type="checkbox" id={{item.id}} class="check" value="on" {{"checked" if item.completed}}>
-        <span style="color: black;" id="c{{item.id}}"> <p>Title: {{ item.title }}</p><p> Author: {{item.author}}</p></span>
+    {% for item in notReserved %}
+      <div class=box>
+        <p>Title: {{ item.title }}</p><p> Author: {{item.author}}</p>
+        <p><a href="{{url_for('reserveBook', id = item.id)}}">Reserve Book</a></p>
+      </div>
+    {% endfor %}
+    {% for items in isReserved %}
+      <div class=box>
+        <p>RESERVED</p>
+        <p>Title: {{ items.title }}</p><p> Author: {{items.author}}</p>
       </div>
     {% endfor %}
 </body>
 {% endif %}
 
-</div>
-<script>
-  window.onload = function() {
-    var checkboxes = document.getElementsByClassName("check");
-    //console.log(checkboxes);
-    for (var i = 0; i < checkboxes.length; i++) {
-      if(checkboxes[i].checked) {
-        document.getElementById("c"+checkboxes[i].id).style.setProperty("text-decoration", "line-through");
-      }
-      checkboxes[i].addEventListener('change', (event) => {
-        if (event.currentTarget.checked)
-        {
-          document.getElementById("c"+event.currentTarget.id).style.setProperty("text-decoration", "line-through");
-        }
-        else
-        {
-          document.getElementById("c"+event.currentTarget.id).style.setProperty("text-decoration", "");
-        }
-        window.location.replace("{{ url_for('book') }}/" + event.currentTarget.id);
-      });
-    }
-  }
-</script>
 {% include "login_footer.html" %}
 {% endblock %}

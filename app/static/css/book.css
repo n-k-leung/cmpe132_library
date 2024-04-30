@@ -7,13 +7,10 @@ h1 {
   text-align:center;
   background-color: #392F5A;
 }
-div.tasks{
+div.box{
   background-color: #AEA7C6;
   margin-top: 10px;
   padding-bottom: 10px;
   padding-top: 10px;
   text-indent: 30px;  
-}
-div.clear{
-  padding-left: 10px;
 }

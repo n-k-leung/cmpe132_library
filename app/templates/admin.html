@@ -30,15 +30,17 @@
 <h2>Pending Approval users </h2>
 {%for notvalid in notvalids%}
     <div class = "boxing">
-    <p> User: {{notvalid.username}}, Role: {{notvalid.act_role}}, Request Role: {{notvalid.reg_role}}</p>
-    <p><a href="{{url_for('modifyUser', id = notvalid.id)}}">Approve User</a></p>
+    <p> User: {{notvalid.username}}, Current Role: {{notvalid.act_role}}, Request Role: {{notvalid.reg_role}}</p>
+    <p><a href="{{url_for('ApproveUser', id = notvalid.id)}}">Approve User</a></p>
     </div>
 {% endfor %}
 <h2>Approved users </h2>
 <!-- show all users -->
 {%for user in users%}
     <div class = "boxing">
-    <p> User: {{user.username}}, Role: {{user.act_role}}, Request Role: {{user.reg_role}}</p>
+    <p> User: {{user.username}}, Role: {{user.act_role}}</p>
+    <p><a href="{{url_for('GuestUser', id = user.id)}}">Change User to Guest</a></p>
+    <p><a href="{{url_for('delUser', id = user.id)}}">Delete</a></p>
     </div>
 {% endfor %}
 

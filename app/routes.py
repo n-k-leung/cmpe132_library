@@ -59,25 +59,8 @@ def admin():
     notvalids = User.query.filter_by(approve=1)
     users = User.query.filter_by(approve=0)
     return render_template('admin.html', form = form, users = users,notvalids=notvalids)
-# @myapp_obj.route("/book", methods=['GET', 'POST'])
-# def addbook():
-#     if not current_user.is_authenticated: 
-#         flash("You aren't logged in yet!")
-#         return redirect('/')
-#     form = AddBook()
-#     if form.validate_on_submit():
-#         if Book.query.filter_by(bookname=form.bookname.data).first() is None:
-#             newBook = Book(bookname = form.bookname.data, bookauthor=form.bookauthor.data)
-#             db.session.add(newBook)
-#             db.session.commit()
-#             flash("Book Added!")
-#             return redirect("/admin_book")
-#         else:
-#             flash("That book already added! Try again with a different name.")
-#             return redirect("/admin_book")
-#     return render_template('admin_book.html', form = form)
-@myapp_obj.route("/modifyUser/<int:id>")
-def modifyUser(id): #get email id of the email that is choosen to be deleted
+@myapp_obj.route("/ApproveUser/<int:id>")
+def ApproveUser(id): #get user id of the user that is choosen to be deleted
     if not current_user.is_authenticated:
         flash("You aren't logged in yet!")
         return redirect('/')
@@ -88,16 +71,52 @@ def modifyUser(id): #get email id of the email that is choosen to be deleted
          db.session.commit()
          flash('User approved')
          return redirect("/index")
-    #no need to render when deleting book
+    #no need to render when changing user role
     return render_template('deleteBook.html', form = form)
-@myapp_obj.route("/book/<int:id>", methods=['GET', 'POST'])
-def BookNew(id):
+@myapp_obj.route("/GuestUser/<int:id>")
+def GuestUser(id): #get user id of the user that is choosen to be deleted
+    if not current_user.is_authenticated:
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    else: 
+         user = User.query.get(id)
+         user.act_role = 'guest'
+         user.approve=1
+         db.session.commit()
+         flash('User changed to guest')
+         return redirect("/index")
+    #no need to render when changing user role
+    return render_template('deleteBook.html', form = form)
+@myapp_obj.route("/delUser/<int:id>")
+def delUser(id): #get user id of the user that is choosen to be deleted
+    if not current_user.is_authenticated:
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    else: 
+         user = User.query.get(id)
+         db.session.delete(user)
+         db.session.commit()
+         flash('User deleted')
+         return redirect("/index")
+    #no need to render when deleting user
+    return render_template('deleteBook.html', form = form)
+@myapp_obj.route("/reserveBook/<int:id>", methods=['GET', 'POST'])
+def reserveBook(id):
     item = Book.query.get(id)
-    item.completed = not item.completed
+    item.reserve=0
     db.session.commit()
-    return redirect('/book')
+    if current_user.act_role == 'admin':
+        return redirect("/admin_book")
+    else:
+        return redirect("/book")
+@myapp_obj.route("/unreserveBook/<int:id>", methods=['GET', 'POST'])
+def unreserveBook(id):
+    item = Book.query.get(id)
+    item.reserve=1
+    db.session.commit()
+    return redirect('/admin_book')
 @myapp_obj.route("/delBook/<int:id>")
-def delBook(id): #get email id of the email that is choosen to be deleted
+def delBook(id): #get book id of the book that is choosen to be deleted
     if not current_user.is_authenticated:
         flash("You aren't logged in yet!")
         return redirect('/')
@@ -106,7 +125,7 @@ def delBook(id): #get email id of the email that is choosen to be deleted
          db.session.delete(book)
          db.session.commit()
          flash('Book deleted')
-         return redirect("/book")
+         return redirect("/admin_book")
     #no need to render when deleting book
     return render_template('deleteBook.html', form = form)
     
@@ -115,20 +134,18 @@ def book():
     if not current_user.is_authenticated: 
         flash("You aren't logged in yet!")
         return redirect('/')
-    noItems = False
-    bookItems = Book.query.all()
-    if bookItems is None: noItems = True
-    return render_template('book.html', items = bookItems, emptyList = noItems)
+    notReserved = Book.query.filter_by(reserve=1)
+    isReserved = Book.query.filter_by(reserve=0)
+    return render_template('book.html', notReserved = notReserved, isReserved=isReserved)
 
 @myapp_obj.route("/admin_book", methods=['GET', 'POST'])
 def admin_book():
     if not current_user.is_authenticated: 
         flash("You aren't logged in yet!")
         return redirect('/')
-    noItems = False
-    bookItems = Book.query.all()
-    if bookItems is None: noItems = True
-    return render_template('admin_book.html', items = bookItems, emptyList = noItems)
+    notReserved = Book.query.filter_by(reserve=1)
+    isReserved = Book.query.filter_by(reserve=0)
+    return render_template('admin_book.html', notReserved = notReserved, isReserved=isReserved)
 
 @myapp_obj.route("/bookAdd", methods=['GET', 'POST'])
 def bookAdd():
@@ -137,7 +154,7 @@ def bookAdd():
         return redirect('/')
     form = AddBook()
     if form.validate_on_submit():
-        book = Book(title=form.title.data, author=form.author.data, username = current_user.username, completed = 0)
+        book = Book(title=form.title.data, author=form.author.data, username = current_user.username, reserve = 1)
         db.session.add(book)
         db.session.commit()
         return redirect('/admin_book')

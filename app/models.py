@@ -28,18 +28,11 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     author = db.Column(db.String(200))
-    completed = db.Column(db.Integer, nullable=False)
+    reserve = db.Column(db.Integer, nullable=False)
     username = db.Column(db.String(32), nullable=False)
     
     def __repr__(self):
         return f'<Book {self.id}: {self.title}: {self.author}: {self.completed}>'
-   
-# class Book(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     bookname = db.Column(db.String(26), nullable=False)
-#     bookauthor = db.Column(db.String(32), nullable=False)
-#     def __repr__(self):
-#         return f'<Book {self.id}: {self.bookname}: {self.bookauthor}>'
 
 @login.user_loader
 def load_user(id):
