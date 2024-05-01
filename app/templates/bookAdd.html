@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bookAdd.css') }}">
 </head>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
   <a class="navbar-brand" href="/">SJSUL</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav>
     <span class="navbar-toggler-icon"></span>
@@ -23,25 +23,22 @@
   </div>
 </nav>
 <h1> Add Books </h1>
-<div class=box>
-<form action="" method="POST" novalidate>
+<div class = "text">
+  <form action="" method="post" novalidate>
     {{form.hidden_tag()}}
     <p> {{form.title.label}}
-       {{form.title(size=200)}}</br>
+      {{form.title()}}</br>
     {%for error in form.title.errors%}
     <span style="color: red;"> [{{error}}]</span></br>
     {% endfor %}
+
     <p> {{form.author.label}}
-      {{form.author(size=200)}}</br>
-   {%for error in form.author.errors%}
-   <span style="color: red;"> [{{error}}]</span></br>
-   {% endfor %}
-    {{form.submit()}}
-    </p>
-</form>
+      {{form.author()}}</br>
+    {%for error in form.author.errors%}
+    <span style="color: red;"> [{{error}}]</span></br>
+    {% endfor %}
+    <p>{{ form.submit() }}</p>
+  </form> 
 </div>
-
-<a href="{{ url_for('book') }}">Click here to go back to the Book List!</a>
-
 {% include "login_footer.html" %}
 {% endblock %}

@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
 </head>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
   <a class="navbar-brand" href="/">SJSUL</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav>
     <span class="navbar-toggler-icon"></span>
@@ -20,22 +20,47 @@
   </div>
 </nav>
 <h1>Book List</h1>
-{% if not emptyList %}
-<body>
-    {% for item in notReserved %}
-      <div class=box>
-        <p>Title: {{ item.title }}</p><p> Author: {{item.author}}</p>
-        <p><a href="{{url_for('reserveBook', id = item.id)}}">Reserve Book</a></p>
-      </div>
-    {% endfor %}
-    {% for items in isReserved %}
-      <div class=box>
-        <p>RESERVED</p>
-        <p>Title: {{ items.title }}</p><p> Author: {{items.author}}</p>
-      </div>
-    {% endfor %}
-</body>
-{% endif %}
+<table>
+  <thread>
+    <tr>
+      <th>Title</th>
+      <th>Author Role </th>
+      <th>Reserve Status</th>
+    </tr>
+  </thread>
+  <tbody>
+  {% if not emptyList %}
+      {% for item in notReserved %}
+      <tr>
+          <td>{{ item.title }}</td>
+          <td>{{item.author}}</td>
+          <td><a href="{{url_for('reserveBook', id = item.id)}}">Reserve Book</a></td>
+      </tr>
+      {% endfor %}
+  {% endif %}
+  </tbody>
+</table>
+<h1>Reserved Book List</h1>
+<table>
+  <thread>
+    <tr>
+      <th>Title</th>
+      <th>Author Role </th>
+      <th>Reserve Status</th>
+    </tr>
+  </thread>
+  <tbody>
+  {% if not emptyList %}
+      {% for item in isReserved %}
+      <tr>
+          <td>{{ item.title }}</td>
+          <td>{{item.author}}</td>
+          <td>Reserved</td>
+      </tr>
+      {% endfor %}
+  {% endif %}
+  </tbody>
+</table>
 
 {% include "login_footer.html" %}
 {% endblock %}

@@ -15,7 +15,7 @@ from . import db
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated: 
-        flash("You are already logged in!")
+        # flash("You are already logged in!")
         return redirect('/index')
     form = LoginForm()
     # if form inputs are valid
