@@ -69,7 +69,7 @@ def ApproveUser(id): #get user id of the user that is choosen to be deleted
          user.act_role = user.reg_role
          user.approve=0
          db.session.commit()
-         flash('User approved')
+        #  flash('User approved')
          return redirect("/index")
     #no need to render when changing user role
     return render_template('deleteBook.html', form = form)
@@ -83,7 +83,7 @@ def GuestUser(id): #get user id of the user that is choosen to be deleted
          user.act_role = 'guest'
          user.approve=1
          db.session.commit()
-         flash('User changed to guest')
+        #  flash('User changed to guest')
          return redirect("/index")
     #no need to render when changing user role
     return render_template('deleteBook.html', form = form)
@@ -96,7 +96,7 @@ def delUser(id): #get user id of the user that is choosen to be deleted
          user = User.query.get(id)
          db.session.delete(user)
          db.session.commit()
-         flash('User deleted')
+        #  flash('User deleted')
          return redirect("/index")
     #no need to render when deleting user
     return render_template('deleteBook.html', form = form)
@@ -124,7 +124,7 @@ def delBook(id): #get book id of the book that is choosen to be deleted
          book = Book.query.get(id)
          db.session.delete(book)
          db.session.commit()
-         flash('Book deleted')
+        #  flash('Book deleted')
          return redirect("/admin_book")
     #no need to render when deleting book
     return render_template('deleteBook.html', form = form)
@@ -184,7 +184,7 @@ def delTech(id): #get tech id of the book that is choosen to be deleted
          tech = Tech.query.get(id)
          db.session.delete(tech)
          db.session.commit()
-         flash('Tech deleted')
+        #  flash('Tech deleted')
          return redirect("/admin_tech")
     
 @myapp_obj.route("/tech", methods=['GET', 'POST'])
@@ -287,6 +287,6 @@ def register():
             # db.session.add(book)
             db.session.commit()
         # login_user(user)
-            flash("Account created!")
+            # flash("Account created!")
             return redirect('/')
     return render_template('register.html', form=form)
