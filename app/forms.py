@@ -30,6 +30,12 @@ class AddBook(FlaskForm):
     author = StringField('Book author', validators=[DataRequired(), validators.Length(max=200)])
     submit = SubmitField('Add Book Item')
 
+class AddTech(FlaskForm):
+    name = StringField('Tech name', validators=[DataRequired(), validators.Length(max=200)])
+    info = StringField('Tech description', validators=[DataRequired(), validators.Length(max=200)])
+    time = StringField('Tech maximum rent time', validators=[DataRequired(), validators.Length(max=200)])
+    submit = SubmitField('Add Tech Item')
+
 class RegisterForm(FlaskForm):
     reg_role  = StringField('Role', validators=[DataRequired(), validators.Length(max=32)], render_kw={"placeholder": "guest"})
     username = StringField('Username', validators=[DataRequired(), validators.Length(max=32)], render_kw={"placeholder": "guest_1"})

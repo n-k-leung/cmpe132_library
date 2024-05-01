@@ -32,7 +32,17 @@ class Book(db.Model):
     username = db.Column(db.String(32), nullable=False)
     
     def __repr__(self):
-        return f'<Book {self.id}: {self.title}: {self.author}: {self.completed}>'
+        return f'<Book {self.id}: {self.title}: {self.author}: {self.reserve}>'
+class Tech(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    info = db.Column(db.String(200))
+    time = db.Column(db.String(200))
+    reserve = db.Column(db.Integer, nullable=False)
+    username = db.Column(db.String(32), nullable=False)
+    
+    def __repr__(self):
+        return f'<Book {self.id}: {self.name}: {self.info}: {self.time}: {self.reserve}>'
 
 @login.user_loader
 def load_user(id):

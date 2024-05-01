@@ -14,13 +14,13 @@
         <a class="nav-link" href="/">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/admin_book">View Books<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/admin_book">View Books</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/bookAdd">Add Books</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/admin_tech">View Tech</a>
+        <a class="nav-link" href="/admin_tech">View Tech<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/techAdd">Add Tech</a>
@@ -34,47 +34,51 @@
     </ul>
   </div>
 </nav>
-<h1>Book List</h1>
+<h1>Tech List</h1>
 <table>
   <thread>
     <tr>
-      <th>Title</th>
-      <th>Author Role </th>
+      <th>Tech Name</th>
+      <th>Description </th>
+      <th>Max Rent Time</th>
       <th>Reserve Status</th>
-      <th>Delete Book</th>
+      <th>Delete Tech</th>
     </tr>
   </thread>
   <tbody>
   {% if not emptyList %}
       {% for item in notReserved %}
       <tr>
-          <td>{{ item.title }}</td>
-          <td>{{item.author}}</td>
-          <td><a href="{{url_for('reserveBook', id = item.id)}}">Reserve Book</a></td>
-          <td><a href="{{url_for('delBook', id = item.id)}}">Delete Book</a></td>
+        <td>{{ item.name }}</td>
+        <td>{{item.info}}</td>
+        <td>{{item.time}}</td>
+          <td><a href="{{url_for('reserveTech', id = item.id)}}">Reserve Tech</a></td>
+          <td><a href="{{url_for('delTech', id = item.id)}}">Delete Tech</a></td>
       </tr>
       {% endfor %}
   {% endif %}
   </tbody>
 </table>
-<h1>Reserved Book List</h1>
+<h1>Reserved Tech List</h1>
 <table>
   <thread>
     <tr>
-      <th>Title</th>
-      <th>Author Role </th>
+      <th>Tech Name</th>
+      <th>Description </th>
+      <th>Max Rent Time</th>
       <th>Reserve Status</th>
-      <th>Delete Book</th>
+      <th>Delete Tech</th>
     </tr>
   </thread>
   <tbody>
   {% if not emptyList %}
       {% for item in isReserved %}
       <tr>
-          <td>{{ item.title }}</td>
-          <td>{{item.author}}</td>
-          <td><a href="{{url_for('unreserveBook', id = item.id)}}">Unreserve Book</a></td>
-          <td><a href="{{url_for('delBook', id = item.id)}}">Delete Book</a></td>
+        <td>{{ item.name }}</td>
+        <td>{{item.info}}</td>
+        <td>{{item.time}}</td>
+        <td><a href="{{url_for('unreserveTech', id = item.id)}}">Unreserve Tech</a></td>
+        <td><a href="{{url_for('delTech', id = item.id)}}">Delete Tech</a></td>
       </tr>
       {% endfor %}
   {% endif %}

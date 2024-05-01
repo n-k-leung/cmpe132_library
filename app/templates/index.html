@@ -13,9 +13,38 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/book">View Books</a>
-      </li>
+      {%if current_user.act_role =="staff"%}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_book">View Books</a>
+        </li>
+      {%endif%}
+      {%if current_user.act_role !="staff"%}
+        <li class="nav-item">
+          <a class="nav-link" href="/book">View Books</a>
+        </li>
+      {%endif%}
+      {%if current_user.act_role =="staff"%}
+        <li class="nav-item">
+          <a class="nav-link" href="/bookAdd">Add Books</a>
+        </li>
+      {%endif%}
+      {%if current_user.act_role =="staff"%}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_tech">View Tech</a>
+        </li>
+      {%endif%}
+      {%if current_user.act_role !="staff"%}
+        {%if current_user.act_role !="guest"%}
+          <li class="nav-item">
+            <a class="nav-link" href="/tech">View Tech</a>
+          </li>
+        {%endif%}
+      {%endif%}
+      {%if current_user.act_role =="staff"%}
+        <li class="nav-item">
+          <a class="nav-link" href="/techAdd">Add Tech</a>
+        </li>
+      {%endif%}
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
       </li>

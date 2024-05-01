@@ -17,13 +17,13 @@
         <a class="nav-link" href="/admin_book">View Books</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/bookAdd">Add Books<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/bookAdd">Add Books</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/admin_tech">View Tech</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/bookTech">Add Tech</a>
+        <a class="nav-link" href="/bookTech">Add Tech<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
@@ -34,21 +34,28 @@
     </ul>
   </div>
 </nav>
-<h1> Add Books </h1>
+<h1> Add Tech </h1>
 <div class = "text">
   <form action="" method="post" novalidate>
     {{form.hidden_tag()}}
-    <p> {{form.title.label}}
-      {{form.title()}}</br>
-    {%for error in form.title.errors%}
+    <p> {{form.name.label}}
+      {{form.name()}}</br>
+    {%for error in form.name.errors%}
     <span style="color: red;"> [{{error}}]</span></br>
     {% endfor %}
 
-    <p> {{form.author.label}}
-      {{form.author()}}</br>
-    {%for error in form.author.errors%}
+    <p> {{form.info.label}}
+      {{form.info()}}</br>
+    {%for error in form.info.errors%}
     <span style="color: red;"> [{{error}}]</span></br>
     {% endfor %}
+
+    <p> {{form.time.label}}
+      {{form.time()}}</br>
+    {%for error in form.time.errors%}
+    <span style="color: red;"> [{{error}}]</span></br>
+    {% endfor %}
+
     <p>{{ form.submit() }}</p>
   </form> 
 </div>

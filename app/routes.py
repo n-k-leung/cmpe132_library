@@ -1,9 +1,9 @@
 from flask import render_template
 from flask import redirect, request, url_for
 from flask import flash
-from .forms import LoginForm, LogoutForm, HomeForm, RegisterForm, DeleteAccountForm, AdminForm, AddBook
+from .forms import LoginForm, LogoutForm, HomeForm, RegisterForm, DeleteAccountForm, AdminForm, AddBook, AddTech
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models import User, Book
+from .models import User, Book, Tech
 from app import myapp_obj
 from flask_login import current_user
 from flask_login import login_user
@@ -105,7 +105,7 @@ def reserveBook(id):
     item = Book.query.get(id)
     item.reserve=0
     db.session.commit()
-    if current_user.act_role == 'admin':
+    if current_user.act_role == 'admin'| current_user.act_role == 'staff':
         return redirect("/admin_book")
     else:
         return redirect("/book")
@@ -159,6 +159,64 @@ def bookAdd():
         db.session.commit()
         return redirect('/admin_book')
     return render_template('bookAdd.html', form = form)
+# tech
+@myapp_obj.route("/reserveTech/<int:id>", methods=['GET', 'POST'])
+def reserveTech(id):
+    item = Tech.query.get(id)
+    item.reserve=0
+    db.session.commit()
+    if current_user.act_role == 'admin'|current_user.act_role == 'staff':
+        return redirect("/admin_tech")
+    else:
+        return redirect("/tech")
+@myapp_obj.route("/unreserveTech/<int:id>", methods=['GET', 'POST'])
+def unreserveTech(id):
+    item = Tech.query.get(id)
+    item.reserve=1
+    db.session.commit()
+    return redirect('/admin_tech')
+@myapp_obj.route("/delTech/<int:id>")
+def delTech(id): #get tech id of the book that is choosen to be deleted
+    if not current_user.is_authenticated:
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    else: 
+         tech = Tech.query.get(id)
+         db.session.delete(tech)
+         db.session.commit()
+         flash('Tech deleted')
+         return redirect("/admin_tech")
+    
+@myapp_obj.route("/tech", methods=['GET', 'POST'])
+def tech():
+    if not current_user.is_authenticated: 
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    notReserved = Tech.query.filter_by(reserve=1)
+    isReserved = Tech.query.filter_by(reserve=0)
+    return render_template('tech.html', notReserved = notReserved, isReserved=isReserved)
+
+@myapp_obj.route("/admin_tech", methods=['GET', 'POST'])
+def admin_tech():
+    if not current_user.is_authenticated: 
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    notReserved = Tech.query.filter_by(reserve=1)
+    isReserved = Tech.query.filter_by(reserve=0)
+    return render_template('admin_tech.html', notReserved = notReserved, isReserved=isReserved)
+
+@myapp_obj.route("/techAdd", methods=['GET', 'POST'])
+def techAdd():
+    if not current_user.is_authenticated: 
+        flash("You aren't logged in yet!")
+        return redirect('/')
+    form = AddTech()
+    if form.validate_on_submit():
+        tech = Tech(name=form.name.data, info=form.info.data, time=form.time.data, username = current_user.username, reserve = 1)
+        db.session.add(tech)
+        db.session.commit()
+        return redirect('/admin_tech')
+    return render_template('techAdd.html', form = form)
 # logout button should only appear when logged in
 @myapp_obj.route("/logout", methods=['POST', 'GET'])
 def logout():
