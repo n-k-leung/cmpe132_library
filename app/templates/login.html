@@ -11,6 +11,7 @@
 <body>
 <form action="" method="POST" novalidate>
     {{form.hidden_tag()}}
+    <body> Possible roles are: guest, student, professor, staff, and admin </body>
     <p> {{form.reg_role.label}} <br>
       {{form.reg_role(size=32)}}
 
