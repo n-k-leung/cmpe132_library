@@ -19,12 +19,19 @@
       <li class="nav-item">
         <a class="nav-link" href="/bookAdd">Add Books</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/delete">Delete Account</a>
+      </li>
     </ul>
   </div>
 </nav>
 <h1> ADMIN Home Page </h1>
 <div class = "boxing">
   <p> Welcome {{current_user.username}}</p>
+  <p>You are currently logged in as {{current_user.act_role}}</p>
 </div>
 <!-- show users needing approval?? -->
 <h2>Pending Approval users </h2>
@@ -73,5 +80,4 @@
   </tbody>
 </table>
 
-{% include "login_footer.html" %}
 {% endblock %}

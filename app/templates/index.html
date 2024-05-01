@@ -16,12 +16,18 @@
       <li class="nav-item">
         <a class="nav-link" href="/book">View Books</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/delete">Delete Account</a>
+      </li>
     </ul>
   </div>
 </nav>
 <h1> Home Page </h1>
 <div class = "boxing">
   <p> Welcome {{current_user.username}}</p>
+  <p>You are currently logged in as {{current_user.act_role}}</p>
 </div>
-{% include "login_footer.html" %}
 {% endblock %}

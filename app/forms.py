@@ -19,7 +19,7 @@ class AdminForm(FlaskForm):
     #for editing roles
     edit = SubmitField('Edit')
 class LogoutForm(FlaskForm):
-    submit = SubmitField("I'm sure - Logout")
+    submit = SubmitField("Logout")
 
 class DeleteAccountForm(FlaskForm):
     password = StringField(validators=[DataRequired(), validators.Length(max=32)])
