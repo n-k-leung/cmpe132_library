@@ -36,9 +36,20 @@
 </nav>
 <h1> ADMIN Home Page </h1>
 <div class = "boxing">
-  <p> Welcome {{current_user.username}}</p>
-  <p>You are currently logged in as {{current_user.act_role}}</p>
+  <p> Welcome {{current_user.username}}! You are currently logged in as {{current_user.act_role}}</p>
 </div>
+<h2>Account Info</h2>
+<div class = "text">
+  <p>Role: {{current_user.act_role}}</p>
+  <p>Username: {{current_user.username}}</p>
+  <p>Email: {{current_user.email}}</p>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 <!-- show users needing approval?? -->
 <h2>Pending Approval users </h2>
 <table>
@@ -47,6 +58,7 @@
       <th>Username</th>
       <th>Request Role </th>
       <th>Approval Status</th>
+      <th>Delete User</th>
     </tr>
   </thread>
   <tbody>
@@ -55,6 +67,7 @@
       <td> {{notvalid.username}}</td>
       <td>{{notvalid.reg_role}}</td>
       <td><a href="{{url_for('ApproveUser', id = notvalid.id)}}">Approve User</a></td>
+      <td><a href="{{url_for('delUser', id = notvalid.id)}}">Delete</a></td>
     </tr>
     {% endfor %}
   </tbody>

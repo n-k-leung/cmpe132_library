@@ -105,7 +105,7 @@ def reserveBook(id):
     item = Book.query.get(id)
     item.reserve=0
     db.session.commit()
-    if current_user.act_role == 'admin'| current_user.act_role == 'staff':
+    if current_user.act_role == 'admin'or current_user.act_role == 'staff':
         return redirect("/admin_book")
     else:
         return redirect("/book")
@@ -165,7 +165,7 @@ def reserveTech(id):
     item = Tech.query.get(id)
     item.reserve=0
     db.session.commit()
-    if current_user.act_role == 'admin'|current_user.act_role == 'staff':
+    if current_user.act_role == 'admin'or current_user.act_role == 'staff':
         return redirect("/admin_tech")
     else:
         return redirect("/tech")
@@ -276,7 +276,10 @@ def register():
             # new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data)
             #initializing all registered users as guest
             #approve = 1 initally so all users registered need to be approved
-            new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =1)
+            if form.reg_role.data == 'guest':
+                new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =0)
+            else:
+                new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =1)
             #uncomment below to have test book initalized
             # book = Book(title="title1", author='book1', username = form.username.data, completed = 0)
             new.set_password(form.password.data)

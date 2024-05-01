@@ -15,9 +15,13 @@ Follow the steps listed below to run the code:
 
 ## Roles and Their Functions
 Guest: can reserve books
+
 Student: can reserve books and tech
+
 Professor: can reserve books and tech
+
 Staff: can reserve/unreserve books, add books, delete books, reserve/unreserve tech, add tech, delete tech
+
 Admin: can approve of users roles, demote users to guest role, reserve/unreserve books, add books, delete books, reserve/unreserve tech, add tech, delete tech
 
 
