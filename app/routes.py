@@ -21,7 +21,7 @@ def login():
     # if form inputs are valid
     if form.register.data:
        return redirect('/register') 
-    # if clicked on register button
+    # clicked on register button
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None:
@@ -46,6 +46,7 @@ def index():
     if not current_user.is_authenticated: 
         flash("You aren't logged in yet!")
         return redirect('/')
+    #check if user is admin, admin gets redirected to a different page because they will be able to see users and approve them
     if current_user.act_role == 'admin':
         return redirect('/admin')
     form = HomeForm()
@@ -56,32 +57,32 @@ def admin():
         flash("You aren't logged in yet!")
         return redirect('/')
     form = AdminForm()
-    notvalids = User.query.filter_by(approve=1)
+    notvalids = User.query.filter_by(approve=1) #shows users that need to be approved to have their desired role
     users = User.query.filter_by(approve=0)
     return render_template('admin.html', form = form, users = users,notvalids=notvalids)
 @myapp_obj.route("/ApproveUser/<int:id>")
-def ApproveUser(id): #get user id of the user that is choosen to be deleted
+def ApproveUser(id): #get user id of the user is getting approved
     if not current_user.is_authenticated:
         flash("You aren't logged in yet!")
         return redirect('/')
     else: 
          user = User.query.get(id)
-         user.act_role = user.reg_role
-         user.approve=0
+         user.act_role = user.reg_role #update that their role is now approved to be the role they registered as
+         user.approve=0 #approve set to 0 to show they no longer need to be approved
          db.session.commit()
         #  flash('User approved')
          return redirect("/index")
     #no need to render when changing user role
     return render_template('deleteBook.html', form = form)
 @myapp_obj.route("/GuestUser/<int:id>")
-def GuestUser(id): #get user id of the user that is choosen to be deleted
+def GuestUser(id): #get user id of the user that is choosen to be deapproved
     if not current_user.is_authenticated:
         flash("You aren't logged in yet!")
         return redirect('/')
     else: 
          user = User.query.get(id)
-         user.act_role = 'guest'
-         user.approve=1
+         user.act_role = 'guest' #update so user will now have guest view
+         user.approve=1 # approve set to 1 to show they need to be approved now
          db.session.commit()
         #  flash('User changed to guest')
          return redirect("/index")
@@ -97,14 +98,16 @@ def delUser(id): #get user id of the user that is choosen to be deleted
          db.session.delete(user)
          db.session.commit()
         #  flash('User deleted')
-         return redirect("/index")
+         return redirect("/index") # can change to /admin but /index handles redirecting to /admin
     #no need to render when deleting user
     return render_template('deleteBook.html', form = form)
 @myapp_obj.route("/reserveBook/<int:id>", methods=['GET', 'POST'])
 def reserveBook(id):
     item = Book.query.get(id)
-    item.reserve=0
+    item.reserve=0 #reserve is set to 0 when it is reserved
     db.session.commit()
+    #staff/admin have different view of View book page so check if they are these roles to direct them to correct page
+    #all users can reserve books
     if current_user.act_role == 'admin'or current_user.act_role == 'staff':
         return redirect("/admin_book")
     else:
@@ -112,7 +115,7 @@ def reserveBook(id):
 @myapp_obj.route("/unreserveBook/<int:id>", methods=['GET', 'POST'])
 def unreserveBook(id):
     item = Book.query.get(id)
-    item.reserve=1
+    item.reserve=1 #reserve is set to 1 when it is not reserved
     db.session.commit()
     return redirect('/admin_book')
 @myapp_obj.route("/delBook/<int:id>")
@@ -134,6 +137,7 @@ def book():
     if not current_user.is_authenticated: 
         flash("You aren't logged in yet!")
         return redirect('/')
+    #seperate not reserved book list and reserved book list
     notReserved = Book.query.filter_by(reserve=1)
     isReserved = Book.query.filter_by(reserve=0)
     return render_template('book.html', notReserved = notReserved, isReserved=isReserved)
@@ -143,6 +147,7 @@ def admin_book():
     if not current_user.is_authenticated: 
         flash("You aren't logged in yet!")
         return redirect('/')
+    #seperate not reserved book list and reserved book list
     notReserved = Book.query.filter_by(reserve=1)
     isReserved = Book.query.filter_by(reserve=0)
     return render_template('admin_book.html', notReserved = notReserved, isReserved=isReserved)
@@ -154,22 +159,26 @@ def bookAdd():
         return redirect('/')
     form = AddBook()
     if form.validate_on_submit():
+        #add new book, all new books are unreserved
         book = Book(title=form.title.data, author=form.author.data, username = current_user.username, reserve = 1)
         db.session.add(book)
         db.session.commit()
         return redirect('/admin_book')
     return render_template('bookAdd.html', form = form)
+
 # tech
 @myapp_obj.route("/reserveTech/<int:id>", methods=['GET', 'POST'])
 def reserveTech(id):
     item = Tech.query.get(id)
     item.reserve=0
     db.session.commit()
+    #staff/admin have different view of View tech page so check if they are these roles to direct them to correct page
+    #every role except guests can reserve books
     if current_user.act_role == 'admin'or current_user.act_role == 'staff':
         return redirect("/admin_tech")
     else:
         return redirect("/tech")
-@myapp_obj.route("/unreserveTech/<int:id>", methods=['GET', 'POST'])
+@myapp_obj.route("/unreserveTech/<int:id>", methods=['GET', 'POST']) #same logic as books
 def unreserveTech(id):
     item = Tech.query.get(id)
     item.reserve=1
@@ -217,7 +226,7 @@ def techAdd():
         db.session.commit()
         return redirect('/admin_tech')
     return render_template('techAdd.html', form = form)
-# logout button should only appear when logged in
+# logout button only appears when logged in
 @myapp_obj.route("/logout", methods=['POST', 'GET'])
 def logout():
     if not current_user.is_authenticated: 
@@ -236,12 +245,9 @@ def delete():
     form = DeleteAccountForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first()
-        if user.check_password(form.password.data): # wrong password
-            bookItems = Book.query.filter_by(username = current_user.username)
+        if user.check_password(form.password.data): 
             logout_user()
-            db.session.delete(user)
-            for item in bookItems:
-                db.session.delete(item)
+            db.session.delete(user) # delete user
             db.session.commit()
             flash("Your account has been successfully deleted.")
             return redirect("/")
@@ -254,10 +260,8 @@ def register():
     if current_user.is_authenticated: 
         flash("You are already logged in!")
         return redirect('/index')
-    # create form
     form = RegisterForm()
-    # if form inputs are valid
-    #if clicked sign in button
+    # if form inputs are valid and they clicked the signin button
     if form.sign.data:
        return redirect('/')
     checkUsername = User.query.filter_by(username=form.username.data).first()
@@ -273,18 +277,14 @@ def register():
             if form.reg_role.data != 'admin' and form.reg_role.data != 'student' and form.reg_role.data != 'professor' and form.reg_role.data != 'staff' and form.reg_role.data != 'guest': #add other roles too cause wasn't working before
                 flash("Invalid role!")
                 return redirect ('/register')
-            # new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data)
             #initializing all registered users as guest
             #approve = 1 initally so all users registered need to be approved
-            if form.reg_role.data == 'guest':
+            if form.reg_role.data == 'guest': #users reg as guest auto approved to be guests because guest role is default
                 new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =0)
             else:
                 new = User(username = form.username.data, email = form.email.data, reg_role = form.reg_role.data, act_role = 'guest', approve =1)
-            #uncomment below to have test book initalized
-            # book = Book(title="title1", author='book1', username = form.username.data, completed = 0)
             new.set_password(form.password.data)
             db.session.add(new)
-            # db.session.add(book)
             db.session.commit()
         # login_user(user)
             # flash("Account created!")

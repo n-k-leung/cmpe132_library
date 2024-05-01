@@ -30,9 +30,10 @@ There are five possible roles a user can be: student, professor, staff, admin, a
 
 When a new user registers, they are automatically set to have the role of a guest. Only after the admin approves of their registration under a different role (i.e. student, professor, staff, or admin) can the new user have thier desired role.
 
-There are three accounts that have been already made to test the code:
+There are four accounts that have been already made to test the code:
 1. admin account-- role:admin, username: aad, email:aad@sjsu.com, password: aad
-1. guest account-- role:guest, username: ggs, email:ggs@sjsu.com, password: 123
-1. student account-- role:student, username: sst, email:sst@sjsu.com, password: 123
+2. staff account-- role:staff, username: sff, email:sff@sjsu.com, password: sff
+3. student account-- role:student, username: dent, email:dent@sjsu.com, password: dent
+4. professor account-- role:professor, username: dent, email:prof@sjsu.com, password: prof  --not approved account
 
 Some sample books and tech were added for demostration
